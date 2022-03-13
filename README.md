@@ -4,8 +4,6 @@ This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image
 
 <img src="teaser.gif" width="500">
 
-
-
 ## Citation
 If you find this code useful for your research, please consider citing our paper:
 ```bibtex
@@ -17,6 +15,3 @@ booktitle={International Conference on Learning Representations},
 year={2022}
 }
 ```
-
-## Acknowledgement
-Part of the evaluation code is adapted from [evan](https://github.com/raahii/evan). We thank authors for their contribution to the community.
