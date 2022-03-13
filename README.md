@@ -2,7 +2,7 @@
 ### [Project Page](https://wyhsirius.github.io/LIA-project/) | [Paper](https://openreview.net/pdf?id=7r6kDq0mK_)
 This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image Animator: Learning to Animate Images via Latent Space Navigation"
 
-<img src="teaser.gif" width="500">
+<img src="LIA.gif" width="500">
 
 ## Citation
 If you find this code useful for your research, please consider citing our paper:
