@@ -9,6 +9,7 @@ This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image
 - PyTorch 1.5+
 - tensorboard
 - moviepy
+- av
 - tqdm
 - lpips
 
