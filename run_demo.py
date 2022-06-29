@@ -66,8 +66,9 @@ class Demo(nn.Module):
         self.gen.eval()
 
         print('==> loading data')
-        self.save_path = os.path.join(args.save_folder + '/%s' % args.model,
-                                      Path(args.source_path).stem + '_' + Path(args.driving_path).stem + '.mp4')
+        self.save_path = args.save_folder + '/%s' % args.model
+        os.makedirs(self.save_path, exist_ok=True)
+        self.save_path = os.path.join(self.save_path, Path(args.source_path).stem + '_' + Path(args.driving_path).stem + '.mp4')
         self.img_source = img_preprocessing(args.source_path, args.size).cuda()
         self.vid_target, self.fps = vid_preprocessing(args.driving_path)
         self.vid_target = self.vid_target.cuda()
