@@ -14,6 +14,9 @@ This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image
 - lpips
 
 ## 1. Animation demo
+
+Try Replicate web demo here [![Replicate](https://replicate.com/wyhsirius/lia/badge)](https://replicate.com/wyhsirius/lia)
+
 Download pre-trained checkpoints from [here](https://drive.google.com/drive/folders/1N4QcnqUQwKUZivFV-YeBuPyH4pGJHooc?usp=sharing) and put models under `./checkpoints`. We have provided several demo source images and driving videos in `./data`. 
 To obtain demos, you could run following commands, generated results will be saved under `./res`.
 ```shell script
