@@ -7,8 +7,8 @@ This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image
 
 <img src="LIA.gif" width="500">
 
-<a href="https://www.inria.fr/"><img height="100" src="assets/logo_inria.png"> </a>
-<a href="https://univ-cotedazur.eu/"><img height="100" src="assets/logo_uca.png"> </a>
+<a href="https://www.inria.fr/"><img height="80" src="assets/logo_inria.png"> </a>
+<a href="https://univ-cotedazur.eu/"><img height="80" src="assets/logo_uca.png"> </a>
 
 ## Requirements
 - Python 3.7
