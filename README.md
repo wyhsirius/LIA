@@ -1,10 +1,14 @@
 # Latent Image Animator: Learning to Animate Images via Latent Space Navigation
+Yaohui Wang, Di Yang, François Brémond, Antitza Dantcheva
 ### [Project Page](https://wyhsirius.github.io/LIA-project/) | [Paper](https://openreview.net/pdf?id=7r6kDq0mK_)
 This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image Animator: Learning to Animate Images via Latent Space Navigation"
 
 [![Replicate](https://replicate.com/wyhsirius/lia/badge)](https://replicate.com/wyhsirius/lia)
 
 <img src="LIA.gif" width="500">
+
+<a href="https://www.inria.fr/"><img height="100" src="assets/logo_inria.png"> </a>
+<a href="https://univ-cotedazur.eu/"><img height="100" src="assets/logo_uca.png"> </a>
 
 ## Requirements
 - Python 3.7
