@@ -1,5 +1,5 @@
 # Latent Image Animator: Learning to Animate Images via Latent Space Navigation
-[Yaohui Wang](https://wyhsirius.github.io/), [Di Yang](https://walker1126.github.io/), [François Brémond](https://www-sop.inria.fr/members/Francois.Bremond/), [Antitza Dantcheva](http://antitza.com/)
+Yaohui Wang, Di Yang, François Brémond, Antitza Dantcheva
 ### [Project Page](https://wyhsirius.github.io/LIA-project/) | [Paper](https://openreview.net/pdf?id=7r6kDq0mK_)
 This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image Animator: Learning to Animate Images via Latent Space Navigation"
 
@@ -9,6 +9,19 @@ This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image
 
 <a href="https://www.inria.fr/"><img height="80" src="assets/logo_inria.png"> </a>
 <a href="https://univ-cotedazur.eu/"><img height="80" src="assets/logo_uca.png"> </a>
+
+Abstract: *Due to the remarkable progress of deep generative models, animating images has become increasingly efficient, whereas associated results have become increasingly realistic. Current animation-approaches commonly exploit structure representation extracted from driving videos. Such structure representation is instrumental in transferring motion from driving videos to still images. However, such approaches fail in case the source image and driving video encompass large appearance variation. Moreover, the extraction of structure information requires additional modules that endow the animation-model with increased complexity. Deviating from such models, we here introduce the Latent Image Animator (LIA), a self-supervised autoencoder that evades need for structure representation. LIA is streamlined to animate images by linear navigation in the latent space. Specifically, motion in generated video is constructed by linear displacement of codes in the latent space. Towards this, we learn a set of orthogonal motion directions simultaneously, and use their linear combination, in order to represent any displacement in the latent space. Extensive quantitative and qualitative analysis suggests that our model systematically and significantly outperforms state-of-art methods on VoxCeleb, Taichi and TED-talk datasets w.r.t. generated quality.*
+
+## BibTex
+```bibtex
+@inproceedings{
+wang2022latent,
+title={Latent Image Animator: Learning to Animate Images via Latent Space Navigation},
+author={Yaohui Wang and Di Yang and Francois Bremond and Antitza Dantcheva},
+booktitle={International Conference on Learning Representations},
+year={2022}
+}
+```
 
 ## Requirements
 - Python 3.7
@@ -83,16 +96,6 @@ To obtain linear manipulation results of a single image, run
 python linear_manipulation.py --model <DATAET> --img_path <IMAGE_PATH> --save_folder <RESULTS_PATH>
 ```
 By default, results will be saved under `./res_manipulation`.
-## Citation
-If you find this code useful for your research, please consider citing our paper:
-```bibtex
-@inproceedings{
-wang2022latent,
-title={Latent Image Animator: Learning to Animate Images via Latent Space Navigation},
-author={Yaohui Wang and Di Yang and Francois Bremond and Antitza Dantcheva},
-booktitle={International Conference on Learning Representations},
-year={2022}
-}
-```
+
 ## Acknowledgement
 Part of the code is adapted from [FOMM](https://github.com/AliaksandrSiarohin/first-order-model) and [MRAA](https://github.com/snap-research/articulated-animation). We thank authors for their contribution to the community.
