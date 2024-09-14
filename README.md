@@ -21,6 +21,13 @@ author={Yaohui Wang and Di Yang and Francois Bremond and Antitza Dantcheva},
 booktitle={International Conference on Learning Representations},
 year={2022}
 }
+
+@ARTICLE{10645735,
+  author={Wang, Yaohui and Yang, Di and Bremond, Francois and Dantcheva, Antitza},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={LIA: Latent Image Animator}, 
+  year={2024},
+  pages={1-16},
 ```
 
 ## Requirements
