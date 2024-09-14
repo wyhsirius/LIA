@@ -28,6 +28,7 @@ year={2022}
   title={LIA: Latent Image Animator}, 
   year={2024},
   pages={1-16},
+}
 ```
 
 ## Requirements
