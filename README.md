@@ -1,4 +1,4 @@
-## Latent Image Animator: Learning to Animate Images via Latent Space Navigation (ICLR 2022) & LIA: Latent Image Animator (TPAMI 2024)
+## LIA: Latent Image Animator
 Yaohui Wang, Di Yang, François Brémond, Antitza Dantcheva
 ### [Project Page](https://wyhsirius.github.io/LIA-project/) | [Paper](https://openreview.net/pdf?id=7r6kDq0mK_)
 This is the official PyTorch implementation of the ICLR 2022 paper "Latent Image Animator: Learning to Animate Images via Latent Space Navigation" and TPAMI 2024 paper "LIA: Latent Image Animator".
