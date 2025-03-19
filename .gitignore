@@ -1,0 +1,13 @@
+.vscode
+preprocess
+results
+results_img
+sample_videos
+pretrained/
+datasets/
+
+__pycache__/
+*.py[cod]
+*$py.class/
+ffs_train.log
+test/

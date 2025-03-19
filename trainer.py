@@ -53,7 +53,8 @@ class Trainer(nn.Module):
         fake_loss = F.softplus(fake_pred)
 
         return real_loss.mean() + fake_loss.mean()
-
+    
+    # TODO sadtalker看怎么加上嘴部的loss
     def gen_update(self, img_source, img_target):
         self.gen.train()
         self.gen.zero_grad()
@@ -64,10 +65,15 @@ class Trainer(nn.Module):
         img_target_recon = self.gen(img_source, img_target)
         img_recon_pred = self.dis(img_target_recon)
 
+        # TODO 加上掩码，加上对眼睛，面部，嘴部和手部的掩码
         vgg_loss = self.criterion_vgg(img_target_recon, img_target).mean()
+
         l1_loss = F.l1_loss(img_target_recon, img_target)
+        
+        # 面部保真，手部结构损失
         gan_g_loss = self.g_nonsaturating_loss(img_recon_pred)
 
+       # TODO 权重比例为10：5：10：5
         g_loss = vgg_loss + l1_loss + gan_g_loss
 
         g_loss.backward()

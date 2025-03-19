@@ -84,20 +84,20 @@ def main(rank, world_size, args):
 
     loader = data.DataLoader(
         dataset,
-        num_workers=8,
+        num_workers=4,
         batch_size=args.batch_size // world_size,
         sampler=data.distributed.DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=True),
         pin_memory=True,
-        drop_last=False,
+        drop_last=True,
     )
 
     loader_test = data.DataLoader(
         dataset_test,
-        num_workers=8,
+        num_workers=4,
         batch_size=4,
         sampler=data.distributed.DistributedSampler(dataset_test, num_replicas=world_size, rank=rank, shuffle=False),
         pin_memory=True,
-        drop_last=False,
+        drop_last=True,
     )
 
     loader = sample_data(loader)
@@ -161,27 +161,28 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--iter", type=int, default=800000)
     parser.add_argument("--size", type=int, default=256)
-    parser.add_argument("--batch_size", type=int, default=64)
+    parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--d_reg_every", type=int, default=16)
     parser.add_argument("--g_reg_every", type=int, default=4)
     parser.add_argument("--resume_ckpt", type=str, default=None)
     parser.add_argument("--lr", type=float, default=0.002)
     parser.add_argument("--channel_multiplier", type=int, default=1)
     parser.add_argument("--start_iter", type=int, default=0)
-    parser.add_argument("--display_freq", type=int, default=5000)
+    parser.add_argument("--display_freq", type=int, default=200)
     parser.add_argument("--save_freq", type=int, default=1000)
     parser.add_argument("--latent_dim_style", type=int, default=512)
     parser.add_argument("--latent_dim_motion", type=int, default=20)
     parser.add_argument("--dataset", type=str, default='vox')
-    parser.add_argument("--exp_path", type=str, default='./exps/')
+    parser.add_argument("--exp_path", type=str, default='./exps_pats/')
     parser.add_argument("--exp_name", type=str, default='v1')
     parser.add_argument("--addr", type=str, default='localhost')
-    parser.add_argument("--port", type=str, default='12345')
+    parser.add_argument("--port", type=str, default='12335')
     opts = parser.parse_args()
-
+    # tensorboard --logdir=./exps_pats/v1/log --port=12335 http://localhost:
     n_gpus = torch.cuda.device_count()
-    assert n_gpus >= 2
+    # assert n_gpus >= 2
 
     world_size = n_gpus
     print('==> training on %d gpus' % n_gpus)
+    # main(args=(world_size, opts,), nprocs=world_size) 
     mp.spawn(main, args=(world_size, opts,), nprocs=world_size, join=True)
