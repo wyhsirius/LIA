@@ -115,17 +115,17 @@ class Trainer(nn.Module):
         pred_main = self.dis_main(img_target_recon)
 
         # 对 batch 内每个样本，根据各 mask 裁剪后统一 resize 到固定尺寸（如 64×64）
-        face_cropped = batch_crop_and_resize(img_target_recon, face_mask, target_size=(64, 64))
-        pred_face = self.dis_face(face_cropped)
+        # face_cropped = batch_crop_and_resize(img_target_recon, face_mask, target_size=(64, 64))
+        pred_face = self.dis_face(img_target_recon * face_mask)
 
-        hands_cropped = batch_crop_and_resize(img_target_recon, hands_mask, target_size=(64, 64))
-        pred_hands = self.dis_hands(hands_cropped)
+        # hands_cropped = batch_crop_and_resize(img_target_recon, hands_mask, target_size=(64, 64))
+        pred_hands = self.dis_hands(img_target_recon * hands_mask)
 
-        lips_cropped = batch_crop_and_resize(img_target_recon, lips_mask, target_size=(64, 64))
-        pred_lips = self.dis_lips(lips_cropped)
+        # lips_cropped = batch_crop_and_resize(img_target_recon, lips_mask, target_size=(64, 64))
+        pred_lips = self.dis_lips(img_target_recon * lips_mask)
 
-        eyes_cropped = batch_crop_and_resize(img_target_recon, eyes, target_size=(64, 64))
-        pred_eyes = self.dis_eyes(eyes_cropped)
+        # eyes_cropped = batch_crop_and_resize(img_target_recon, eyes, target_size=(64, 64))
+        pred_eyes = self.dis_eyes(img_target_recon * eyes)
 
         # 对抗损失
         gan_main_loss  = self.g_nonsaturating_loss(pred_main)
@@ -178,20 +178,28 @@ class Trainer(nn.Module):
         loss_main = self.d_nonsaturating_loss(fake_pred_main, real_pred_main)
 
         # 局部判别器：依次对每个区域裁剪，再输入对应的判别器
-        real_face = batch_crop_and_resize(img_real, face_mask, target_size=(64, 64))
-        fake_face = batch_crop_and_resize(img_recon.detach(), face_mask, target_size=(64, 64))
+        # real_face = batch_crop_and_resize(img_real, face_mask, target_size=(64, 64))
+        # fake_face = batch_crop_and_resize(img_recon.detach(), face_mask, target_size=(64, 64))
+        real_face = img_real * face_mask
+        fake_face = img_recon.detach() * face_mask
         loss_face = self.d_nonsaturating_loss(self.dis_face(fake_face), self.dis_face(real_face))
 
-        real_hands = batch_crop_and_resize(img_real, hands_mask, target_size=(64, 64))
-        fake_hands = batch_crop_and_resize(img_recon.detach(), hands_mask, target_size=(64, 64))
+        # real_hands = batch_crop_and_resize(img_real, hands_mask, target_size=(64, 64))
+        # fake_hands = batch_crop_and_resize(img_recon.detach(), hands_mask, target_size=(64, 64))
+        fake_hands = img_recon.detach() * hands_mask
+        real_hands = img_real * hands_mask
         loss_hands = self.d_nonsaturating_loss(self.dis_hands(fake_hands), self.dis_hands(real_hands))
 
-        real_lips = batch_crop_and_resize(img_real, lips_mask, target_size=(64, 64))
-        fake_lips = batch_crop_and_resize(img_recon.detach(), lips_mask, target_size=(64, 64))
+        # real_lips = batch_crop_and_resize(img_real, lips_mask, target_size=(64, 64))
+        # fake_lips = batch_crop_and_resize(img_recon.detach(), lips_mask, target_size=(64, 64))
+        fake_lips = img_recon.detach() * lips_mask
+        real_lips = img_real * lips_mask
         loss_lips = self.d_nonsaturating_loss(self.dis_lips(fake_lips), self.dis_lips(real_lips))
 
-        real_eyes = batch_crop_and_resize(img_real, eyes, target_size=(64, 64))
-        fake_eyes = batch_crop_and_resize(img_recon.detach(), eyes, target_size=(64, 64))
+        # real_eyes = batch_crop_and_resize(img_real, eyes, target_size=(64, 64))
+        # fake_eyes = batch_crop_and_resize(img_recon.detach(), eyes, target_size=(64, 64))
+        fake_eyes = img_recon.detach() * eyes
+        real_eyes = img_real * eyes
         loss_eyes = self.d_nonsaturating_loss(self.dis_eyes(fake_eyes), self.dis_eyes(real_eyes))
 
         # 合并判别器损失（可以设置不同权重，此处简单相加）
