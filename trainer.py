@@ -50,10 +50,10 @@ class Trainer(nn.Module):
 
         # 定义多个判别器：全图和局部（face, hands, lips, eyes）
         self.dis_main = Discriminator(args.size, args.channel_multiplier).to(device)
-        self.dis_face = Discriminator(args.size // (args.size // 64), args.channel_multiplier).to(device)
-        self.dis_hands = Discriminator(args.size // (args.size // 64), args.channel_multiplier).to(device)
-        self.dis_lips = Discriminator(args.size // (args.size // 64), args.channel_multiplier).to(device)
-        self.dis_eyes = Discriminator(args.size // (args.size // 64), args.channel_multiplier).to(device)
+        self.dis_face = Discriminator(args.size, args.channel_multiplier).to(device)
+        self.dis_hands = Discriminator(args.size, args.channel_multiplier).to(device)
+        self.dis_lips = Discriminator(args.size, args.channel_multiplier).to(device)
+        self.dis_eyes = Discriminator(args.size, args.channel_multiplier).to(device)
 
         self.gen = Generator(args.size, args.latent_dim_style, args.latent_dim_motion, args.channel_multiplier).to(device)
 
