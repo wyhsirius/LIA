@@ -11,3 +11,5 @@ __pycache__/
 *$py.class/
 ffs_train.log
 test/
+exps_pats/
+exps_pats2/

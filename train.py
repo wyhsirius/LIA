@@ -2,7 +2,7 @@ import argparse
 import os
 import torch
 from torch.utils import data
-from dataset import Vox256, Taichi, TED
+from dataset import Vox256, Taichi, TED, TED_TEST
 import torchvision
 import torchvision.transforms as transforms
 from trainer import Trainer
@@ -72,7 +72,7 @@ def main(rank, world_size, args):
 
     if args.dataset == 'ted':
         dataset = TED('train', transform, True)
-        dataset_test = TED('test', transform)
+        dataset_test = TED_TEST('test', transform)
     elif args.dataset == 'vox':
         dataset = Vox256('train', transform, False)
         dataset_test = Vox256('test', transform)
@@ -118,16 +118,20 @@ def main(rank, world_size, args):
         i = idx + args.start_iter
 
         # laoding data
-        img_source, img_target = next(loader)
+        img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask = next(loader)
         img_source = img_source.to(rank, non_blocking=True)
         img_target = img_target.to(rank, non_blocking=True)
+        face_mask = (1 + face_mask).to(rank, non_blocking=True)
+        lips_mask = (1 + lips_mask).to(rank, non_blocking=True)
+        hands_mask = (1 + hands_mask).to(rank, non_blocking=True)
+        eyes_mask = (1 + eyes_mask).to(rank, non_blocking=True)
 
         # update generator
-        vgg_loss, l1_loss, gan_g_loss, img_recon = trainer.gen_update(img_source, img_target)
+        vgg_loss, l1_loss, gan_g_loss, img_recon = trainer.gen_update(img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask)
 
         # update discriminator
-        gan_d_loss = trainer.dis_update(img_target, img_recon)
-
+        gan_d_loss = trainer.dis_update(img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask)
+        
         if rank == 0:
             # write to log
             write_loss(idx, vgg_loss, l1_loss, gan_g_loss, gan_d_loss, writer)
@@ -161,7 +165,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--iter", type=int, default=800000)
     parser.add_argument("--size", type=int, default=256)
-    parser.add_argument("--batch_size", type=int, default=4)
+    parser.add_argument("--batch_size", type=int, default=64)
     parser.add_argument("--d_reg_every", type=int, default=16)
     parser.add_argument("--g_reg_every", type=int, default=4)
     parser.add_argument("--resume_ckpt", type=str, default=None)
@@ -176,13 +180,14 @@ if __name__ == "__main__":
     parser.add_argument("--exp_path", type=str, default='./exps_pats/')
     parser.add_argument("--exp_name", type=str, default='v1')
     parser.add_argument("--addr", type=str, default='localhost')
-    parser.add_argument("--port", type=str, default='12335')
+    parser.add_argument("--port", type=str, default='12231')
     opts = parser.parse_args()
     # tensorboard --logdir=./exps_pats/v1/log --port=12335 http://localhost:
     n_gpus = torch.cuda.device_count()
-    # assert n_gpus >= 2
+    assert n_gpus >= 2
 
     world_size = n_gpus
     print('==> training on %d gpus' % n_gpus)
     # main(args=(world_size, opts,), nprocs=world_size) 
     mp.spawn(main, args=(world_size, opts,), nprocs=world_size, join=True)
+# nohup python train.py --dataset 'ted' --exp_path './exps_pats/' --exp_name 'v1' > ./exps_pats/train_1.log 2>&1 &

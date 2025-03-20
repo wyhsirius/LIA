@@ -22,7 +22,7 @@ class RandomCrop(object):
 
         self.size = size
 
-    def __call__(self, img_source, img_target):
+    def __call__(self, img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask):
         """
         Args:
         img (PIL.Image or numpy.ndarray): List of videos to be cropped
@@ -44,26 +44,38 @@ class RandomCrop(object):
         if isinstance(img_source, np.ndarray):
             img_source_crop = img_source[y1:y1 + h, x1:x1 + w, :]
             img_target_crop = img_target[y1:y1 + h, x1:x1 + w, :]
+            img_face_mask_crop = face_mask[y1:y1 + h, x1:x1 + w, :]
+            img_hands_mask_crop = hands_mask[y1:y1 + h, x1:x1 + w, :]
+            img_lips_mask_crop = lips_mask[y1:y1 + h, x1:x1 + w, :]
+            img_eyes_mask_crop = eyes_mask[y1:y1 + h, x1:x1 + w, :]
 
         elif isinstance(img_source, PIL.Image.Image):
             img_source_crop = img_source.crop((x1, y1, x1 + w, y1 + h))
             img_target_crop = img_target.crop((x1, y1, x1 + w, y1 + h))
+            img_face_mask_crop = face_mask.crop((x1, y1, x1 + w, y1 + h))
+            img_hands_mask_crop = hands_mask.crop((x1, y1, x1 + w, y1 + h))
+            img_lips_mask_crop = lips_mask.crop((x1, y1, x1 + w, y1 + h))
+            img_eyes_mask_crop = eyes_mask.crop((x1, y1, x1 + w, y1 + h))
         else:
             raise TypeError('Expected numpy.ndarray or PIL.Image but got {0}'.format(type(img_source)))
 
-        return img_source_crop, img_target_crop
+        return img_source_crop, img_target_crop, img_face_mask_crop, img_hands_mask_crop, img_lips_mask_crop, img_eyes_mask_crop
 
 
 class RandomFlip(object):
     def __init__(self, horizontal_flip=True):
         self.horizontal_flip = horizontal_flip
 
-    def __call__(self, img_source, img_target):
+    def __call__(self, img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask):
         if random.random() < 0.5 and self.horizontal_flip:
-            # return np.fliplr(img_source), np.fliplr(img_target)
-            return img_source.transpose(PIL.Image.FLIP_LEFT_RIGHT), img_target.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            img_source = img_source.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            img_target = img_target.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            face_mask = face_mask.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            hands_mask = hands_mask.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            lips_mask = lips_mask.transpose(PIL.Image.FLIP_LEFT_RIGHT)
+            eyes_mask = eyes_mask.transpose(PIL.Image.FLIP_LEFT_RIGHT)
 
-        return img_source, img_target
+        return img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask
 
 
 class ColorJitter(object):
@@ -110,7 +122,7 @@ class ColorJitter(object):
             hue_factor = None
         return brightness_factor, contrast_factor, saturation_factor, hue_factor
 
-    def __call__(self, img_source, img_target):
+    def __call__(self, img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask):
         """
         Args:
         clip (list): list of PIL.Image
@@ -141,6 +153,11 @@ class ColorJitter(object):
                 for func in img_transforms:
                     jittered_source = func(img_source).astype('float32')
                     jittered_target = func(img_target).astype('float32')
+                    jittered_face_mask = func(face_mask).astype('float32')
+                    jittered_hands_mask = func(hands_mask).astype('float32')
+                    jittered_lips_mask = func(lips_mask).astype('float32')
+                    jittered_eyes_mask = func(eyes_mask).astype('float32')
+
 
         elif isinstance(img_source, PIL.Image.Image):
             brightness, contrast, saturation, hue = self.get_params(self.brightness, self.contrast, self.saturation,
@@ -162,11 +179,15 @@ class ColorJitter(object):
             for func in img_transforms:
                 jittered_source = func(img_source)
                 jittered_target = func(img_target)
+                jittered_face_mask = func(face_mask)
+                jittered_hands_mask = func(hands_mask)
+                jittered_lips_mask = func(lips_mask)
+                jittered_eyes_mask = func(eyes_mask)
 
         else:
             raise TypeError('Expected numpy.ndarray or PIL.Image' +
                             'but got list of {0}'.format(type(img_source)))
-        return jittered_source, jittered_target
+        return jittered_source, jittered_target, jittered_face_mask, jittered_hands_mask, jittered_lips_mask, jittered_eyes_mask
 
 
 class AugmentationTransform:
@@ -181,9 +202,9 @@ class AugmentationTransform:
         if jitter:
             self.transforms.append(ColorJitter(0.1, 0.1, 0.1, 0.1))
 
-    def __call__(self, img_source, img_target):
+    def __call__(self, img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask):
 
         for t in self.transforms:
-            img_source, img_target = t(img_source, img_target)
+            img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask = t(img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask)
 
-        return img_source, img_target
+        return img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask
