@@ -127,10 +127,10 @@ def main(rank, world_size, args):
         eyes_mask = (1 + eyes_mask).to(rank, non_blocking=True)
 
         # update generator
-        vgg_loss, l1_loss, gan_g_loss, img_recon = trainer.gen_update(img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask)
+        vgg_loss, l1_loss, gan_g_loss, img_recon = trainer.gen_update(img_source, img_target)
 
         # update discriminator
-        gan_d_loss = trainer.dis_update(img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask)
+        gan_d_loss = trainer.dis_update(img_source, img_target)
         
         if rank == 0:
             # write to log
