@@ -10,6 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 import torch.distributed as dist
 import torch.multiprocessing as mp
 
+
 torch.backends.cudnn.enabled = True
 torch.backends.cudnn.benchmark = True
 
@@ -34,11 +35,12 @@ def display_img(idx, img, name, writer):
     writer.add_images(tag='%s' % (name), global_step=idx, img_tensor=img)
 
 
-def write_loss(i, vgg_loss, l1_loss, g_loss, d_loss, writer):
+def write_loss(i, vgg_loss, l1_loss, g_loss, d_loss, key_loss, writer):
     writer.add_scalar('vgg_loss', vgg_loss.item(), i)
     writer.add_scalar('l1_loss', l1_loss.item(), i)
     writer.add_scalar('gen_loss', g_loss.item(), i)
     writer.add_scalar('dis_loss', d_loss.item(), i)
+    writer.add_scalar('key_loss', d_loss.item(), i)
     writer.flush()
 
 
@@ -127,19 +129,19 @@ def main(rank, world_size, args):
         eyes_mask = (1 + eyes_mask).to(rank, non_blocking=True)
 
         # update generator
-        vgg_loss, l1_loss, gan_g_loss, img_recon = trainer.gen_update(img_source, img_target)
+        vgg_loss, l1_loss, gan_g_loss, img_recon, key_loss = trainer.gen_update(img_source, img_target, face_mask, hands_mask, lips_mask, eyes_mask)
 
         # update discriminator
         gan_d_loss = trainer.dis_update(img_source, img_target)
         
         if rank == 0:
             # write to log
-            write_loss(idx, vgg_loss, l1_loss, gan_g_loss, gan_d_loss, writer)
+            write_loss(idx, vgg_loss, l1_loss, gan_g_loss, gan_d_loss, key_loss, writer)
 
         # display
         if i % args.display_freq == 0 and rank == 0:
-            print("[Iter %d/%d] [vgg loss: %f] [l1 loss: %f] [g loss: %f] [d loss: %f]"
-                  % (i, args.iter, vgg_loss.item(), l1_loss.item(), gan_g_loss.item(), gan_d_loss.item()))
+            print("[Iter %d/%d] [vgg loss: %f] [l1 loss: %f] [g loss: %f] [d loss: %f] [k loss: %f]"
+                  % (i, args.iter, vgg_loss.item(), l1_loss.item(), gan_g_loss.item(), gan_d_loss.item(), key_loss.item()))
 
             if rank == 0:
                 img_test_source, img_test_target = next(loader_test)
@@ -165,7 +167,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--iter", type=int, default=800000)
     parser.add_argument("--size", type=int, default=256)
-    parser.add_argument("--batch_size", type=int, default=16)
+    parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--d_reg_every", type=int, default=16)
     parser.add_argument("--g_reg_every", type=int, default=4)
     parser.add_argument("--resume_ckpt", type=str, default=None)
@@ -175,14 +177,14 @@ if __name__ == "__main__":
     parser.add_argument("--display_freq", type=int, default=200)
     parser.add_argument("--save_freq", type=int, default=1000)
     parser.add_argument("--latent_dim_style", type=int, default=512)
-    parser.add_argument("--latent_dim_motion", type=int, default=20)
+    parser.add_argument("--latent_dim_motion", type=int, default=100)
     parser.add_argument("--dataset", type=str, default='vox')
     parser.add_argument("--exp_path", type=str, default='./exps_pats/')
-    parser.add_argument("--exp_name", type=str, default='v2')
+    parser.add_argument("--exp_name", type=str, default='v14')
     parser.add_argument("--addr", type=str, default='localhost')
     parser.add_argument("--port", type=str, default='12231')
     opts = parser.parse_args()
-    # tensorboard --logdir=./exps_pats/v1/log --port=12335 http://localhost:
+    # tensorboard --logdir=./exps_pats/v14/log --port=12323 http://localhost:
     n_gpus = torch.cuda.device_count()
     assert n_gpus >= 2
 
@@ -190,4 +192,4 @@ if __name__ == "__main__":
     print('==> training on %d gpus' % n_gpus)
     # main(args=(world_size, opts,), nprocs=world_size) 
     mp.spawn(main, args=(world_size, opts,), nprocs=world_size, join=True)
-# nohup python train.py --dataset 'ted' --exp_path './exps_pats/' --exp_name 'v1' > ./exps_pats/train_1.log 2>&1 &
+# nohup python train.py --dataset 'ted' --exp_path './exps_pats2_dim_100/' --exp_name 'v14_latent_dim_100' > ./exps_pats2_dim_100/train_13.log 2>&1 &

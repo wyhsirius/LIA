@@ -6,6 +6,10 @@ sample_videos
 pretrained/
 datasets/
 
+A2J-Transformer-main/
+exps_pats2_dim_100/
+pretrained_models/
+
 __pycache__/
 *.py[cod]
 *$py.class/
