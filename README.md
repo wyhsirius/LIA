@@ -54,13 +54,13 @@ If you would like to use your own image and video, indicate `<SOURCE_PATH>` (sou
 python run_demo.py --model <DATASET> --source_path <SOURCE_PATH> --driving_path <DRIVING_PATH>
 ```
 
-## 4. Evaluation
+## 2. Evaluation
 To obtain reconstruction and LPIPS results, put checkpoints under `./checkpoints` and run
 ```shell script
 python evaluation.py --dataset <DATASET> --save_path <SAVE_PATH>
 ```
 Generated videos will be save under `<SAVE_PATH>`. For other evaluation metrics, we use the code from [here](https://github.com/AliaksandrSiarohin/pose-evaluation).
-## 5. Linear manipulation
+## 3. Linear manipulation
 To obtain linear manipulation results of a single image, run
 ```shell script
 python linear_manipulation.py --model <DATAET> --img_path <IMAGE_PATH> --save_folder <RESULTS_PATH>
