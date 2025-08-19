@@ -53,45 +53,7 @@ If you would like to use your own image and video, indicate `<SOURCE_PATH>` (sou
 ```shell script
 python run_demo.py --model <DATASET> --source_path <SOURCE_PATH> --driving_path <DRIVING_PATH>
 ```
-## 2. Datasets
 
-Please follow the instructions in [FOMM](https://github.com/AliaksandrSiarohin/first-order-model) and [MRAA](https://github.com/snap-research/articulated-animation) to download and preprocess VoxCeleb, Taichi and Ted datasets. Put datasets under `./datasets` and organize them as follows:
-
-#### Vox (Taichi, Ted)
-```
-Video Dataset (vox, taichi, ted)
-|-- train
-    |-- video1
-        |-- frame1.png
-        |-- frame2.png
-        |-- ...
-    |-- video2
-        |-- frame1.png
-        |-- frame2.png
-        |-- ...
-    |-- ...
-|-- test
-    |-- video1
-        |-- frame1.png
-        |-- frame2.png
-        |-- ...
-    |-- video2
-        |-- frame1.png
-        |-- frame2.png
-        |-- ...
-    |-- ...
-```
-## 3. Training
-By default, we use `DistributedDataParallel` on 8 V100 for all datasets. To train the netowrk, run
-```shell script
-python train.py --dataset <DATSET> --exp_path <EXP_PATH> --exp_name <EXP_NAME>
-```
-The dataset list is as follows, `<DATASET>`: {`vox`,`taichi`,`ted`}. Tensorboard log and checkpoints will be saved in `<EXP_PATH>/<EXP_NAME>/log` and `<EXP_PATH>/<EXP_NAME>/chekcpoints` respectively.
-
-To train from a checkpoint, run
-```shell script
-python train.py --dataset <DATASET> --exp_path <EXP_PATH> --exp_name <EXP_NAME> --resume_ckpt <CHECKPOINT_PATH>
-```
 ## 4. Evaluation
 To obtain reconstruction and LPIPS results, put checkpoints under `./checkpoints` and run
 ```shell script
