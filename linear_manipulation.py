@@ -1,3 +1,13 @@
+# Copyright (C) 2021, Inria 
+# STARS research group, https://team.inria.fr/stars/
+# All rights reserved.
+#
+# This software is free for non-commercial, research and evaluation use
+# under the terms of the LICENSE.md file.
+#
+# For inquiries contact wyhsirius@gmail.com, francois.bremond@inria.fr, antitza.dantcheva@inria.fr
+#
+
 import torch
 import torch.nn as nn
 from networks.generator import Generator
