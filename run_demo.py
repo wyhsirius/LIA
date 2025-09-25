@@ -18,6 +18,7 @@ import os
 from PIL import Image
 from pathlib import Path
 from tqdm import tqdm
+import cv2
 
 
 def load_image(filename, size):
@@ -37,10 +38,28 @@ def img_preprocessing(img_path, size):
     return imgs_norm
 
 
-def vid_preprocessing(vid_path):
-    vid_dict = torchvision.io.read_video(vid_path, pts_unit='sec')
-    vid = vid_dict[0].permute(0, 3, 1, 2).unsqueeze(0)
-    fps = vid_dict[2]['video_fps']
+def vid_preprocessing(vid_path, size=256):
+    # vid_dict = torchvision.io.read_video(vid_path, pts_unit='sec')
+    cap = cv2.VideoCapture(vid_path)
+    video_fps = cap.get(cv2.CAP_PROP_FPS)
+    # video_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+    # video_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    # video_frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+
+    video = []
+    while(cap.isOpened()):
+        ret, frame = cap.read()
+        if ret:
+            video.append(frame)
+        else:
+            break
+    cap.release()
+    video = np.array([
+        cv2.resize(frame, (size, size)) for frame in video
+    ])
+
+    vid = torch.from_numpy(video).permute(0, 3, 1, 2).unsqueeze(0)
+    fps = video_fps
     vid_norm = (vid / 255.0 - 0.5) * 2.0  # [-1, 1]
 
     return vid_norm, fps
@@ -80,7 +99,7 @@ class Demo(nn.Module):
         os.makedirs(self.save_path, exist_ok=True)
         self.save_path = os.path.join(self.save_path, Path(args.source_path).stem + '_' + Path(args.driving_path).stem + '.mp4')
         self.img_source = img_preprocessing(args.source_path, args.size).cuda()
-        self.vid_target, self.fps = vid_preprocessing(args.driving_path)
+        self.vid_target, self.fps = vid_preprocessing(args.driving_path, args.size)
         self.vid_target = self.vid_target.cuda()
 
     def run(self):
