@@ -53,7 +53,7 @@ By default, results will be saved under `./res_manipulation`.
 2. FLOAT: Generative Motion Latent Flow Matching for Audio-driven Talking Portrait [ICCV'25]
 3. FixTalk: Taming Identity Leakage for High-Quality Talking Head Generation in Extreme Cases [ICCV'25]
 
-## Application of LIA in other domain
+## Application of LIA's idea in other domain
 1. Latent Motion Profiling for Annotation-free Cardiac Phase Detection in Adult and Fetal Echocardiography Videos [MICCAI'25]
 
 ## Acknowledgement
