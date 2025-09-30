@@ -12,25 +12,6 @@ This is the official PyTorch implementation of the **ICLR 2022** paper "Latent I
 
 Abstract: *Due to the remarkable progress of deep generative models, animating images has become increasingly efficient, whereas associated results have become increasingly realistic. Current animation-approaches commonly exploit structure representation extracted from driving videos. Such structure representation is instrumental in transferring motion from driving videos to still images. However, such approaches fail in case the source image and driving video encompass large appearance variation. Moreover, the extraction of structure information requires additional modules that endow the animation-model with increased complexity. Deviating from such models, we here introduce the Latent Image Animator (LIA), a self-supervised autoencoder that evades need for structure representation. LIA is streamlined to animate images by linear navigation in the latent space. Specifically, motion in generated video is constructed by linear displacement of codes in the latent space. Towards this, we learn a set of orthogonal motion directions simultaneously, and use their linear combination, in order to represent any displacement in the latent space. Extensive quantitative and qualitative analysis suggests that our model systematically and significantly outperforms state-of-art methods on VoxCeleb, Taichi and TED-talk datasets w.r.t. generated quality.*
 
-## BibTex
-```bibtex
-@inproceedings{
-wang2022latent,
-title={Latent Image Animator: Learning to Animate Images via Latent Space Navigation},
-author={Yaohui Wang and Di Yang and Francois Bremond and Antitza Dantcheva},
-booktitle={International Conference on Learning Representations},
-year={2022}
-}
-
-@ARTICLE{10645735,
-  author={Wang, Yaohui and Yang, Di and Bremond, Francois and Dantcheva, Antitza},
-  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
-  title={LIA: Latent Image Animator}, 
-  year={2024},
-  pages={1-16},
-}
-```
-
 ## Requirements
 - Python 3.7
 - PyTorch 1.5+
@@ -67,5 +48,32 @@ python linear_manipulation.py --model <DATAET> --img_path <IMAGE_PATH> --save_fo
 ```
 By default, results will be saved under `./res_manipulation`.
 
+## Work build upon LIA
+1. EDTalk: Efficient Disentanglement for Emotional Talking Head Synthesis [ECCV'25]
+2. FLOAT: Generative Motion Latent Flow Matching for Audio-driven Talking Portrait [ICCV'25]
+3. FixTalk: Taming Identity Leakage for High-Quality Talking Head Generation in Extreme Cases [ICCV'25]
+
+## Application of LIA in other domain
+1. Latent Motion Profiling for Annotation-free Cardiac Phase Detection in Adult and Fetal Echocardiography Videos [MICCAI'25]
+
 ## Acknowledgement
 Part of the code is adapted from [FOMM](https://github.com/AliaksandrSiarohin/first-order-model) and [MRAA](https://github.com/snap-research/articulated-animation). We thank authors for their contribution to the community.
+
+## BibTex
+```bibtex
+@inproceedings{
+wang2022latent,
+title={Latent Image Animator: Learning to Animate Images via Latent Space Navigation},
+author={Yaohui Wang and Di Yang and Francois Bremond and Antitza Dantcheva},
+booktitle={International Conference on Learning Representations},
+year={2022}
+}
+
+@ARTICLE{10645735,
+  author={Wang, Yaohui and Yang, Di and Bremond, Francois and Dantcheva, Antitza},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={LIA: Latent Image Animator}, 
+  year={2024},
+  pages={1-16},
+}
+```
