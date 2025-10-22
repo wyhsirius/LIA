@@ -52,9 +52,7 @@ By default, results will be saved under `./res_manipulation`.
 1. EDTalk: Efficient Disentanglement for Emotional Talking Head Synthesis [ECCV'25]
 2. FLOAT: Generative Motion Latent Flow Matching for Audio-driven Talking Portrait [ICCV'25]
 3. FixTalk: Taming Identity Leakage for High-Quality Talking Head Generation in Extreme Cases [ICCV'25]
-
-## Application of LIA's idea in other domain
-1. Latent Motion Profiling for Annotation-free Cardiac Phase Detection in Adult and Fetal Echocardiography Videos [MICCAI'25]
+4. Latent Motion Profiling for Annotation-free Cardiac Phase Detection in Adult and Fetal Echocardiography Videos [MICCAI'25]
 
 ## Acknowledgement
 Part of the code is adapted from [FOMM](https://github.com/AliaksandrSiarohin/first-order-model) and [MRAA](https://github.com/snap-research/articulated-animation). We thank authors for their contribution to the community.
